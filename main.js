@@ -266,6 +266,12 @@ function initAuth() {
   // auth 繝懊ち繝ｳ縺後↑縺・・繝ｼ繧ｸ・・uccess / error・峨〒縺ｯ菴輔ｂ縺励↑縺・
   if (!authBtn) return;
 
+  // 即座にボタンを有効化（IPチェック完了を待たない）
+  authBtn.classList.remove('auth-btn--disabled');
+  var initialBtnText = document.getElementById('auth-btn-text');
+  if (initialBtnText) initialBtnText.textContent = 'Discordで認証する';
+
+  // バックグラウンドでIPチェック（VPN検出時のみ無効化）
   fetch('/api/check-ip')
     .then(function(res) {
       if (!res.ok) throw new Error('check failed');
@@ -281,17 +287,12 @@ function initAuth() {
       } else {
         statusDot.className = 'status-dot status-dot--ok';
         statusText.textContent = '接続に問題ありません';
-        authBtn.classList.remove('auth-btn--disabled');
-        var btnText2 = document.getElementById('auth-btn-text');
-        if (btnText2) btnText2.textContent = 'Discordで認証する';
       }
     })
     .catch(function() {
+      // エラー時はそのまま有効状態を維持
       statusDot.className = 'status-dot status-dot--ok';
-      statusText.textContent = '接続を完了しました';
-      authBtn.classList.remove('auth-btn--disabled');
-      var btnText3 = document.getElementById('auth-btn-text');
-      if (btnText3) btnText3.textContent = 'Discordで認証する';
+      statusText.textContent = '接続に問題ありません';
     });
 }
 
