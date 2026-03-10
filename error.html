@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>認証エラー - 高級ジェネ</title>
+  <link rel="icon" href="https://super-hiko14.com/favicon.ico">
+  <link rel="stylesheet" href="main.css">
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <nav class="site-nav" aria-label="サイトナビゲーション">
+    <button class="site-nav-toggle" aria-label="メニューを開く" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="site-nav-drawer" aria-hidden="true">
+      <ul>
+        <li><a href="https://super-hiko14.com"><span class="site-nav-item-text"><span class="site-nav-item-title">Profile</span><span class="site-nav-item-domain">super-hiko14.com</span></span><span class="site-nav-item-arrow">→</span></a></li>
+        <li><a href="https://about.super-hiko14.com"><span class="site-nav-item-text"><span class="site-nav-item-title">About</span><span class="site-nav-item-domain">about.super-hiko14.com</span></span><span class="site-nav-item-arrow">→</span></a></li>
+        <li><a href="https://kokyujene.super-hiko14.com"><span class="site-nav-item-text"><span class="site-nav-item-title">高級ジェネ™</span><span class="site-nav-item-domain">kokyujene.super-hiko14.com</span></span><span class="site-nav-item-arrow">→</span></a></li>
+        <li><a href="https://tools.super-hiko14.com"><span class="site-nav-item-text"><span class="site-nav-item-title">Tools</span><span class="site-nav-item-domain">tools.super-hiko14.com</span></span><span class="site-nav-item-arrow">→</span></a></li>
+        <li><a href="https://auth.super-hiko14.com"><span class="site-nav-item-text"><span class="site-nav-item-title">認証</span><span class="site-nav-item-domain">auth.super-hiko14.com</span></span><span class="site-nav-item-arrow">→</span></a></li>
+        <li><a href="https://legal.super-hiko14.com"><span class="site-nav-item-text"><span class="site-nav-item-title">Legal</span><span class="site-nav-item-domain">legal.super-hiko14.com</span></span><span class="site-nav-item-arrow">→</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="auth-wrap">
+    <div class="auth-card">
+      <div class="result-icon result-icon--error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+
+      <div class="auth-accent-bar"></div>
+
+      <h1 class="auth-title" id="error-title">認証に失敗しました</h1>
+      <div class="error-reason" id="error-detail">予期しないエラーが発生しました。時間をおいて再度お試しください。</div>
+
+      <a class="auth-btn" href="/">もう一度試す</a>
+    </div>
+  </main>
+
+  <button class="theme-toggle" id="theme-toggle-btn" aria-label="テーマを切替">
+    <img class="theme-icon-light" src="https://super-hiko14.com/sozai/images/moon.png" alt="" width="22" height="22">
+    <img class="theme-icon-dark"  src="https://super-hiko14.com/sozai/images/sun.png"  alt="" width="22" height="22">
+  </button>
+
+  <script>
+    (function() {
+      var ERRORS = {
+        vpn:       { title: 'VPN / プロキシ検出',        detail: 'VPN、プロキシ、またはデータセンター回線が検出されました。VPNをオフにしてから再度お試しください。' },
+        age:       { title: 'アカウントが新しすぎます',   detail: 'Discordアカウント作成から14日未満のため認証できません。しばらく経ってから再度お試しください。' },
+        duplicate: { title: '重複が検出されました',       detail: 'このIPアドレスでは既に別のアカウントが認証済みです。サブアカウントの疑いがあるためブロックされました。' },
+        invalid:   { title: 'セッションエラー',          detail: '認証セッションが無効または期限切れです。最初からやり直してください。' },
+        guild:     { title: 'サーバー未参加',            detail: '先にDiscordサーバーに参加してから認証してください。' },
+        unknown:   { title: '認証に失敗しました',        detail: '予期しないエラーが発生しました。時間をおいて再度お試しください。' },
+      };
+      var type = new URLSearchParams(location.search).get('type') || 'unknown';
+      var msg = ERRORS[type] || ERRORS.unknown;
+      document.getElementById('error-title').textContent = msg.title;
+      document.getElementById('error-detail').textContent = msg.detail;
+    })();
+  </script>
+</body>
+</html>
