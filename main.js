@@ -1,4 +1,4 @@
-// ① テーマ初期化（フラッシュ防止 — DOMContentLoaded前に実行）
+﻿// 竭 繝・・繝槫・譛溷喧・医ヵ繝ｩ繝・す繝･髦ｲ豁｢ 窶・DOMContentLoaded蜑阪↓螳溯｡鯉ｼ・
 (function() {
   var theme = 'light';
   try {
@@ -12,7 +12,7 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
 
-// ② ページ遷移プログレスバー
+// 竭｡ 繝壹・繧ｸ驕ｷ遘ｻ繝励Ο繧ｰ繝ｬ繧ｹ繝舌・
 (function() {
   var SK = 'navProgress';
 
@@ -24,7 +24,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    // ページA: クリック時にフラグを立てる
+    // 繝壹・繧ｸA: 繧ｯ繝ｪ繝・け譎ゅ↓繝輔Λ繧ｰ繧堤ｫ九※繧・
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a');
       if (!link) return;
@@ -33,12 +33,12 @@
       var href = link.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return;
 
-      // サブドメイン間対応: クッキーにフラグ（domain共有）
+      // 繧ｵ繝悶ラ繝｡繧､繝ｳ髢灘ｯｾ蠢・ 繧ｯ繝・く繝ｼ縺ｫ繝輔Λ繧ｰ・・omain蜈ｱ譛会ｼ・
       document.cookie = SK + '=1; path=/; domain=super-hiko14.com; max-age=10';
       try { sessionStorage.setItem(SK, '1'); } catch (_) {}
     });
 
-    // ページB: フラグを確認してアニメーション開始
+    // 繝壹・繧ｸB: 繝輔Λ繧ｰ繧堤｢ｺ隱阪＠縺ｦ繧｢繝九Γ繝ｼ繧ｷ繝ｧ繝ｳ髢句ｧ・
     var pending = false;
     try {
       if (sessionStorage.getItem(SK) === '1') {
@@ -67,7 +67,7 @@
   });
 })();
 
-// ③ DOMContentLoaded で各初期化
+// 竭｢ DOMContentLoaded 縺ｧ蜷・・譛溷喧
 document.addEventListener('DOMContentLoaded', function() {
   initTheme();
   initSiteNav();
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initAuth();
 });
 
-// テーマトグル
+// 繝・・繝槭ヨ繧ｰ繝ｫ
 function initTheme() {
   var btn = document.querySelector('.theme-toggle');
   if (!btn) return;
@@ -87,20 +87,20 @@ function initTheme() {
   });
 }
 
-// サイトナビゲーション初期化
+// 繧ｵ繧､繝医リ繝薙ご繝ｼ繧ｷ繝ｧ繝ｳ蛻晄悄蛹・
 function initSiteNav() {
   var nav     = document.querySelector('.site-nav');
   var toggle  = document.querySelector('.site-nav-toggle');
   var drawer  = document.querySelector('.site-nav-drawer');
   if (!toggle || !drawer || !nav) return;
 
-  // バックドロップ
+  // 繝舌ャ繧ｯ繝峨Ο繝・・
   var backdrop = document.createElement('div');
   backdrop.className = 'site-nav-backdrop';
   backdrop.setAttribute('aria-hidden', 'true');
   document.body.appendChild(backdrop);
 
-  // ドロワーヘッダー
+  // 繝峨Ο繝ｯ繝ｼ繝倥ャ繝繝ｼ
   var drawerHeader = document.createElement('div');
   drawerHeader.className = 'site-nav-drawer-header';
   drawerHeader.innerHTML =
@@ -112,7 +112,7 @@ function initSiteNav() {
     '</span>';
   drawer.insertBefore(drawerHeader, drawer.firstChild);
 
-  // アイコンマップ
+  // 繧｢繧､繧ｳ繝ｳ繝槭ャ繝・
   var ICON_MAP = {
     'super-hiko14.com':        '<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>',
     'about.super-hiko14.com':  '<path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"/>',
@@ -185,7 +185,7 @@ function initSiteNav() {
     }
   });
 
-  // タッチスワイプ
+  // 繧ｿ繝・メ繧ｹ繝ｯ繧､繝・
   var touchStartY = 0;
   drawer.addEventListener('touchstart', function(e) { touchStartY = e.touches[0].clientY; }, { passive: true });
   drawer.addEventListener('touchend', function(e) {
@@ -193,7 +193,7 @@ function initSiteNav() {
     if (dy < -60) closeNav();
   }, { passive: true });
 
-  // カレントページのハイライト（aria-current）
+  // 繧ｫ繝ｬ繝ｳ繝医・繝ｼ繧ｸ縺ｮ繝上う繝ｩ繧､繝茨ｼ・ria-current・・
   try {
     var currentHost = location.hostname;
     drawer.querySelectorAll('a[href]').forEach(function(link) {
@@ -212,10 +212,10 @@ function initSiteNav() {
     link.addEventListener('click', function() { closeNav(); });
   });
 
-  // ナビ位置追従（.box がない場合は何もしない）
+  // 繝翫ン菴咲ｽｮ霑ｽ蠕難ｼ・box 縺後↑縺・ｴ蜷医・菴輔ｂ縺励↑縺・ｼ・
   var boxes = Array.from(document.querySelectorAll('.box'));
   if (!boxes.length) {
-    // auth ページには .box がないので固定位置のまま
+    // auth 繝壹・繧ｸ縺ｫ縺ｯ .box 縺後↑縺・・縺ｧ蝗ｺ螳壻ｽ咲ｽｮ縺ｮ縺ｾ縺ｾ
     nav.style.top = '';
     return;
   }
@@ -257,13 +257,13 @@ function initSiteNav() {
   rafId = requestAnimationFrame(onFrame);
 }
 
-// ④ 認証ページの IP チェック
+// 竭｣ 隱崎ｨｼ繝壹・繧ｸ縺ｮ IP 繝√ぉ繝・け
 function initAuth() {
   var authBtn  = document.getElementById('auth-btn');
   var statusDot  = document.getElementById('status-dot');
   var statusText = document.getElementById('status-text');
 
-  // auth ボタンがないページ（success / error）では何もしない
+  // auth 繝懊ち繝ｳ縺後↑縺・・繝ｼ繧ｸ・・uccess / error・峨〒縺ｯ菴輔ｂ縺励↑縺・
   if (!authBtn) return;
 
   fetch('/api/check-ip')
@@ -273,14 +273,12 @@ function initAuth() {
     })
     .then(function(data) {
       if (data.clean === false) {
-        // VPN / Proxy 検出
         statusDot.className = 'status-dot status-dot--blocked';
         statusText.textContent = 'VPN / プロキシが検出されました';
         authBtn.classList.add('auth-btn--disabled');
         var btnText = document.getElementById('auth-btn-text');
         if (btnText) btnText.textContent = '認証できません';
       } else {
-        // クリーン
         statusDot.className = 'status-dot status-dot--ok';
         statusText.textContent = '接続に問題ありません';
         authBtn.classList.remove('auth-btn--disabled');
@@ -289,11 +287,11 @@ function initAuth() {
       }
     })
     .catch(function() {
-      // エラー時はボタンを有効化（サーバー側で再チェック）
       statusDot.className = 'status-dot status-dot--ok';
-      statusText.textContent = '接続に問題ありません';
+      statusText.textContent = '接続を完了しました';
       authBtn.classList.remove('auth-btn--disabled');
       var btnText3 = document.getElementById('auth-btn-text');
       if (btnText3) btnText3.textContent = 'Discordで認証する';
     });
 }
+
