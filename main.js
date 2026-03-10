@@ -257,42 +257,39 @@ function initSiteNav() {
   rafId = requestAnimationFrame(onFrame);
 }
 
-// 竭｣ 隱崎ｨｼ繝壹・繧ｸ縺ｮ IP 繝√ぉ繝・け
+// ④ 認証ページの IP チェック
 function initAuth() {
-  var authBtn  = document.getElementById('auth-btn');
+  var authBtn    = document.getElementById('auth-btn');
   var statusDot  = document.getElementById('status-dot');
   var statusText = document.getElementById('status-text');
+  var btnText    = document.getElementById('auth-btn-text');
 
-  // auth 繝懊ち繝ｳ縺後↑縺・・繝ｼ繧ｸ・・uccess / error・峨〒縺ｯ菴輔ｂ縺励↑縺・
   if (!authBtn) return;
 
-  // 即座にボタンを有効化（IPチェック完了を待たない）
+  // 即座に強制的に有効化
   authBtn.classList.remove('auth-btn--disabled');
-  var initialBtnText = document.getElementById('auth-btn-text');
-  if (initialBtnText) initialBtnText.textContent = 'Discordで認証する';
+  authBtn.style.pointerEvents = 'auto';
+  authBtn.style.opacity = '1';
+  if (btnText) btnText.textContent = 'Discordで認証する';
+  if (statusDot) statusDot.className = 'status-dot status-dot--ok';
+  if (statusText) statusText.textContent = '接続を完了しました';
 
-  // バックグラウンドでIPチェック（VPN検出時のみ無効化）
+  // バックグラウンドでIPチェック（VPN検出時のみ後からブロック）
   fetch('/api/check-ip')
-    .then(function(res) {
-      if (!res.ok) throw new Error('check failed');
-      return res.json();
-    })
+    .then(function(res) { return res.json(); })
     .then(function(data) {
-      if (data.clean === false) {
-        statusDot.className = 'status-dot status-dot--blocked';
-        statusText.textContent = 'VPN / プロキシが検出されました';
+      if (data && data.clean === false) {
+        if (statusDot) statusDot.className = 'status-dot status-dot--blocked';
+        if (statusText) statusText.textContent = 'VPN / プロキシを検出しました';
         authBtn.classList.add('auth-btn--disabled');
-        var btnText = document.getElementById('auth-btn-text');
+        authBtn.style.pointerEvents = 'none';
+        authBtn.style.opacity = '0.5';
         if (btnText) btnText.textContent = '認証できません';
-      } else {
-        statusDot.className = 'status-dot status-dot--ok';
-        statusText.textContent = '接続に問題ありません';
       }
     })
     .catch(function() {
-      // エラー時はそのまま有効状態を維持
-      statusDot.className = 'status-dot status-dot--ok';
-      statusText.textContent = '接続に問題ありません';
+      // エラー時はそのまま有効（何もしない）
     });
 }
+
 
