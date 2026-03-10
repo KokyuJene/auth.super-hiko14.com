@@ -1,0 +1,233 @@
+﻿/* =========================================
+   Auth — Container/Box オーバーライド
+   本家 main.css の .container/.box を尊重しつつ、
+   認証カードを中央寄せにするための最小限の調整
+   ========================================= */
+.container {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.auth-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  width: 100%;
+}
+
+.footer-box {
+  width: 100%;
+}
+
+/* =========================================
+   Auth Card
+   ========================================= */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.auth-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.auth-accent-bar {
+  width: 32px;
+  height: 2px;
+  background: linear-gradient(90deg, #275766 0%, #baffc0 100%);
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+
+.auth-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  margin: 0 0 10px;
+}
+
+.auth-subtitle {
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.7;
+  margin: 0 0 24px;
+  letter-spacing: 0.02em;
+}
+
+html[data-theme="dark"] .auth-subtitle { color: #666; }
+
+/* =========================================
+   Status row
+   ========================================= */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot--checking {
+  background: #f0b429;
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+.status-dot--ok      { background: #6ddbb0; }
+.status-dot--blocked { background: #e05252; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* =========================================
+   Auth Button (Discord blue)
+   ========================================= */
+.auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 28px;
+  border-radius: 12px;
+  background: #5865F2;
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  transition: background 0.22s ease, transform 0.18s ease,
+              opacity 0.22s ease, box-shadow 0.22s ease;
+  box-shadow: 0 4px 16px rgba(88, 101, 242, 0.35);
+  width: 100%;
+  margin-bottom: 20px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.auth-btn:hover {
+  background: #4752c4;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(88, 101, 242, 0.45);
+}
+
+.auth-btn--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* =========================================
+   Security badges
+   ========================================= */
+.security-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  color: #888;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  letter-spacing: 0.02em;
+}
+
+html[data-theme="dark"] .badge {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.07);
+  color: #555;
+}
+
+/* =========================================
+   Auth note (利用規約)
+   ========================================= */
+.auth-note {
+  font-size: 0.72rem;
+  color: #bbb;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.auth-note a {
+  color: #999;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  transition: color 0.18s ease;
+}
+
+.auth-note a:hover { color: #6ddbb0; }
+
+html[data-theme="dark"] .auth-note   { color: #444; }
+html[data-theme="dark"] .auth-note a { color: #555; border-bottom-color: rgba(255, 255, 255, 0.1); }
+
+/* =========================================
+   Result pages (success / error)
+   ========================================= */
+.result-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.result-icon svg { flex-shrink: 0; width: 36px; height: 36px; }
+
+.result-icon--success {
+  background: rgba(109, 219, 176, 0.15);
+  color: #4bc48a;
+}
+
+.result-icon--error {
+  background: rgba(224, 82, 82, 0.12);
+  color: #e05252;
+}
+
+.error-reason {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 0.82rem;
+  color: #777;
+  line-height: 1.65;
+  margin-bottom: 24px;
+  text-align: left;
+  letter-spacing: 0.02em;
+}
+
+html[data-theme="dark"] .error-reason {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.07);
+  color: #666;
+}

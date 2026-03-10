@@ -1,12 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>認証エラー - 高級ジェネ</title>
   <link rel="icon" href="https://super-hiko14.com/favicon.ico">
-  <link rel="stylesheet" href="main.css">
-  <script src="main.js"></script>
+  <link rel="icon" type="image/png" href="https://super-hiko14.com/favicon.png">
+  <link rel="stylesheet" href="https://super-hiko14.com/main.css">
+  <link rel="stylesheet" href="/auth.css">
+  <script src="/main.js"></script>
 </head>
 
 <body>
@@ -26,29 +28,65 @@
     </div>
   </nav>
 
-  <main class="auth-wrap">
-    <div class="auth-card">
-      <div class="result-icon result-icon--error">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="15" y1="9" x2="9" y2="15"/>
-          <line x1="9" y1="9" x2="15" y2="15"/>
-        </svg>
+  <main class="container">
+
+    <div class="box auth-box">
+      <div class="auth-card">
+        <div class="result-icon result-icon--error">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+
+        <div class="auth-accent-bar"></div>
+
+        <h1 class="auth-title" id="error-title">認証に失敗しました</h1>
+        <div class="error-reason" id="error-detail">予期しないエラーが発生しました。時間をおいて再度お試しください。</div>
+
+        <a class="auth-btn" href="/">もう一度試す</a>
       </div>
-
-      <div class="auth-accent-bar"></div>
-
-      <h1 class="auth-title" id="error-title">認証に失敗しました</h1>
-      <div class="error-reason" id="error-detail">予期しないエラーが発生しました。時間をおいて再度お試しください。</div>
-
-      <a class="auth-btn" href="/">もう一度試す</a>
     </div>
-  </main>
 
-  <button class="theme-toggle" id="theme-toggle-btn" aria-label="テーマを切替">
-    <img class="theme-icon-light" src="https://super-hiko14.com/sozai/images/moon.png" alt="" width="22" height="22">
-    <img class="theme-icon-dark"  src="https://super-hiko14.com/sozai/images/sun.png"  alt="" width="22" height="22">
-  </button>
+    <div class="box footer-box">
+      <div class="footer">
+        <div class="footer-top">
+          <nav class="footer-nav" aria-label="フッターナビゲーション">
+            <div class="footer-nav-group">
+              <span class="footer-nav-label">サイト</span>
+              <a href="https://super-hiko14.com">Profile</a>
+              <a href="https://about.super-hiko14.com">About</a>
+              <a href="https://tools.super-hiko14.com">Tools</a>
+            </div>
+            <div class="footer-nav-group">
+              <span class="footer-nav-label">法的情報</span>
+              <a href="https://legal.super-hiko14.com/terms">利用規約</a>
+              <a href="https://legal.super-hiko14.com/privacypolicy">プライバシーポリシー</a>
+            </div>
+          </nav>
+          <div class="footer-controls">
+            <button class="theme-toggle" aria-label="テーマ切り替え">
+              <img src="https://super-hiko14.com/sozai/images/moon.webp" alt="ダークモード" class="theme-icon-light" width="22" height="22">
+              <img src="https://super-hiko14.com/sozai/images/sun.webp"  alt="ライトモード" class="theme-icon-dark"  width="22" height="22">
+            </button>
+            <button class="scroll-to-top" aria-label="トップへ戻る">
+              <img src="https://super-hiko14.com/sozai/images/top_light.webp" alt="トップへ" class="scroll-icon-light" width="22" height="22">
+              <img src="https://super-hiko14.com/sozai/images/top_dark.webp"  alt="トップへ" class="scroll-icon-dark"  width="22" height="22">
+            </button>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 Super Hiko14 All rights reserved.<br>All logos and trademarks are the property of their respective owners.</p>
+        </div>
+        <div class="footer-credit" aria-label="Created by Super Hiko14">
+          <div class="footer-credit-label">Created by</div>
+          <div class="footer-credit-main">Super Hiko14<span class="footer-credit-dot">.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
 
   <script>
     (function() {

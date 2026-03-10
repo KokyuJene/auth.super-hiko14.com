@@ -71,6 +71,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   initTheme();
   initSiteNav();
+  initScrollToTop();
   initAuth();
 });
 

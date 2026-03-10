@@ -52,7 +52,7 @@ module.exports = async (req, res) => {
   // ① state 検証（CSRF 防止）
   if (!code || !state || state !== savedState) {
     res.setHeader('Set-Cookie', CLEAR_COOKIE);
-    return res.redirect('/error.html?type=invalid');
+    return res.redirect('/error/?type=invalid');
   }
 
   // ② IP 再チェック
@@ -65,7 +65,7 @@ module.exports = async (req, res) => {
       await logAuth({ id: 'unknown', username: 'unknown' }, ip, 'blocked_vpn', ipResult.reason);
       sendWebhook(null, ip, 'blocked_vpn', ipResult.reason);
       res.setHeader('Set-Cookie', CLEAR_COOKIE);
-      return res.redirect('/error.html?type=vpn');
+      return res.redirect('/error/?type=vpn');
     }
   } catch {
     // ProxyCheck 失敗は続行
@@ -77,21 +77,21 @@ module.exports = async (req, res) => {
     tokenData = await exchangeCode(code);
   } catch {
     res.setHeader('Set-Cookie', CLEAR_COOKIE);
-    return res.redirect('/error.html?type=invalid');
+    return res.redirect('/error/?type=invalid');
   }
 
   if (!tokenData || !tokenData.access_token) {
     res.setHeader('Set-Cookie', CLEAR_COOKIE);
-    return res.redirect('/error.html?type=invalid');
+    return res.redirect('/error/?type=invalid');
   }
 
-  // ④ ユーザー情報取得
+  // ⑤ ユーザー情報取得
   let user;
   try {
     user = await getDiscordUser(tokenData.access_token);
   } catch {
     res.setHeader('Set-Cookie', CLEAR_COOKIE);
-    return res.redirect('/error.html?type=invalid');
+    return res.redirect('/error/?type=invalid');
   }
 
   // ⑤ アカウント年齢チェック
@@ -100,7 +100,7 @@ module.exports = async (req, res) => {
     await logAuth(user, ip, 'blocked_age', `アカウント作成から ${ageDays} 日`);
     sendWebhook(user, ip, 'blocked_age', `アカウント作成から ${ageDays} 日`);
     res.setHeader('Set-Cookie', CLEAR_COOKIE);
-    return res.redirect('/error.html?type=age');
+      return res.redirect('/error/?type=age');
   }
 
   // ⑥ 重複 IP チェック（サブアカ検知）
@@ -109,7 +109,7 @@ module.exports = async (req, res) => {
     await logAuth(user, ip, 'blocked_duplicate', `既存認証: ${duplicateId}`);
     sendWebhook(user, ip, 'blocked_duplicate', `既存認証: ${duplicateId}`);
     res.setHeader('Set-Cookie', CLEAR_COOKIE);
-    return res.redirect('/error.html?type=duplicate');
+      return res.redirect('/error/?type=duplicate');
   }
 
   // ⑦ ロール付与
@@ -120,17 +120,17 @@ module.exports = async (req, res) => {
       await logAuth(user, ip, 'blocked_guild', 'サーバー未参加');
       sendWebhook(user, ip, 'blocked_guild', 'サーバー未参加');
       res.setHeader('Set-Cookie', CLEAR_COOKIE);
-      return res.redirect('/error.html?type=guild');
+      return res.redirect('/error/?type=guild');
     }
     await logAuth(user, ip, 'blocked_unknown', e.message);
     sendWebhook(user, ip, 'blocked_unknown', e.message);
     res.setHeader('Set-Cookie', CLEAR_COOKIE);
-    return res.redirect('/error.html?type=unknown');
+    return res.redirect('/error/?type=unknown');
   }
 
   // ⑧ 成功ログ & リダイレクト
   await logAuth(user, ip, 'success');
   sendWebhook(user, ip, 'success');
   res.setHeader('Set-Cookie', CLEAR_COOKIE);
-  res.redirect('/success.html');
+  res.redirect('/success/');
 };
