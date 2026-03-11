@@ -10,10 +10,16 @@ module.exports = async (req, res) => {
     return res.redirect('/error/?type=unknown');
   }
 
-  // reCAPTCHA 検証
-  const isHuman = await verifyRecaptcha(recaptcha);
-  if (!isHuman) {
-    return res.redirect('/error/?type=bot');
+  // reCAPTCHA 検証（await を確実に行う）
+  try {
+    const isHuman = await verifyRecaptcha(recaptcha);
+    if (!isHuman) {
+      console.error('Bot detected or reCAPTCHA error');
+      return res.redirect('/error/?type=bot');
+    }
+  } catch (err) {
+    console.error('Internal reCAPTCHA error:', err);
+    return res.redirect('/error/?type=unknown');
   }
 
   // CSRF 対策: ランダムな state を生成してクッキーに保存
