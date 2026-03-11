@@ -10,16 +10,16 @@ module.exports = async (req, res) => {
     return res.redirect('/error/?type=unknown');
   }
 
-  // reCAPTCHA 検証（await を確実に行う）
+  // reCAPTCHA 検証（null=スキップ扱い、0.1以下のみボット判定）
   try {
-    const isHuman = await verifyRecaptcha(recaptcha);
-    if (!isHuman) {
-      console.error('Bot detected or reCAPTCHA error');
+    const score = await verifyRecaptcha(recaptcha);
+    if (score !== null && score < 0.1) {
+      console.error('Bot detected: score =', score);
       return res.redirect('/error/?type=bot');
     }
   } catch (err) {
     console.error('Internal reCAPTCHA error:', err);
-    return res.redirect('/error/?type=unknown');
+    // reCAPTCHA 自体のエラーは続行（VPN チェックが本命）
   }
 
   // CSRF 対策: ランダムな state を生成してクッキーに保存
