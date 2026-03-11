@@ -2,19 +2,7 @@ const { checkIP }                                          = require('../lib/pro
 const { exchangeCode, getDiscordUser, getAccountAgeInDays, assignRole } = require('../lib/discord');
 const { logAuth, checkDuplicateIP }                        = require('../lib/supabase');
 
-const CLEAR_COOKIE = 'oauth_state=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0';
 const MIN_AGE_DAYS = 14;
-
-function parseCookies(req) {
-  const list = {};
-  const header = req.headers.cookie;
-  if (!header) return list;
-  header.split(';').forEach(c => {
-    const [k, ...rest] = c.split('=');
-    list[k.trim()] = rest.join('=').trim();
-  });
-  return list;
-}
 
 function sendWebhook(user, ip, status, detail) {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
@@ -46,12 +34,10 @@ function sendWebhook(user, ip, status, detail) {
 
 module.exports = async (req, res) => {
   const { code, state } = req.query;
-  const cookies   = parseCookies(req);
-  const savedState = cookies.oauth_state;
+  const expectedState = process.env.DISCORD_OAUTH_STATE;
 
-  // ① state 検証（CSRF 防止）
-  if (!code || !state || state !== savedState) {
-    res.setHeader('Set-Cookie', CLEAR_COOKIE);
+  // ① state 検証（環境変数の固定 state と照合）
+  if (!code || !state || !expectedState || state !== expectedState) {
     return res.redirect('/error/?type=invalid');
   }
 
@@ -64,7 +50,6 @@ module.exports = async (req, res) => {
     if (ipResult.isProxy) {
       await logAuth({ id: 'unknown', username: 'unknown' }, ip, 'blocked_vpn', ipResult.reason);
       sendWebhook(null, ip, 'blocked_vpn', ipResult.reason);
-      res.setHeader('Set-Cookie', CLEAR_COOKIE);
       return res.redirect('/error/?type=vpn');
     }
   } catch {
@@ -99,17 +84,15 @@ module.exports = async (req, res) => {
   if (ageDays < MIN_AGE_DAYS) {
     await logAuth(user, ip, 'blocked_age', `アカウント作成から ${ageDays} 日`);
     sendWebhook(user, ip, 'blocked_age', `アカウント作成から ${ageDays} 日`);
-    res.setHeader('Set-Cookie', CLEAR_COOKIE);
-      return res.redirect('/error/?type=age');
+    return res.redirect('/error/?type=age');
   }
 
-  // ⑥ 重複 IP チェック（サブアカ検知）
+  // ⑦ 重複 IP チェック（サブアカ検知）
   const duplicateId = await checkDuplicateIP(ip, user.id);
   if (duplicateId) {
     await logAuth(user, ip, 'blocked_duplicate', `既存認証: ${duplicateId}`);
     sendWebhook(user, ip, 'blocked_duplicate', `既存認証: ${duplicateId}`);
-    res.setHeader('Set-Cookie', CLEAR_COOKIE);
-      return res.redirect('/error/?type=duplicate');
+    return res.redirect('/error/?type=duplicate');
   }
 
   // ⑦ ロール付与
@@ -119,18 +102,15 @@ module.exports = async (req, res) => {
     if (e.message === 'NOT_IN_GUILD') {
       await logAuth(user, ip, 'blocked_guild', 'サーバー未参加');
       sendWebhook(user, ip, 'blocked_guild', 'サーバー未参加');
-      res.setHeader('Set-Cookie', CLEAR_COOKIE);
       return res.redirect('/error/?type=guild');
     }
     await logAuth(user, ip, 'blocked_unknown', e.message);
     sendWebhook(user, ip, 'blocked_unknown', e.message);
-    res.setHeader('Set-Cookie', CLEAR_COOKIE);
     return res.redirect('/error/?type=unknown');
   }
 
   // ⑧ 成功ログ & リダイレクト
   await logAuth(user, ip, 'success');
   sendWebhook(user, ip, 'success');
-  res.setHeader('Set-Cookie', CLEAR_COOKIE);
   res.redirect('/success/');
 };

@@ -1,12 +1,12 @@
-const { randomBytes } = require('crypto');
 const { verifyRecaptcha } = require('../lib/recaptcha');
 
 module.exports = async (req, res) => {
   const { recaptcha } = req.query;
-  const clientId   = process.env.DISCORD_CLIENT_ID;
+  const clientId    = process.env.DISCORD_CLIENT_ID;
   const redirectUri = process.env.OAUTH_REDIRECT_URI;
+  const state       = process.env.DISCORD_OAUTH_STATE;
 
-  if (!clientId || !redirectUri) {
+  if (!clientId || !redirectUri || !state) {
     return res.redirect('/error/?type=unknown');
   }
 
@@ -22,9 +22,6 @@ module.exports = async (req, res) => {
     // reCAPTCHA 自体のエラーは続行（VPN チェックが本命）
   }
 
-  // CSRF 対策: ランダムな state を生成してクッキーに保存
-  const state = randomBytes(32).toString('hex');
-
   const params = new URLSearchParams({
     client_id:     clientId,
     redirect_uri:  redirectUri,
@@ -34,9 +31,5 @@ module.exports = async (req, res) => {
     prompt:        'consent',
   });
 
-  res.setHeader(
-    'Set-Cookie',
-    `oauth_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=300`
-  );
   res.redirect(`https://discord.com/api/oauth2/authorize?${params}`);
 };
