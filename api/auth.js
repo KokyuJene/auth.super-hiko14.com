@@ -1,11 +1,19 @@
 const { randomBytes } = require('crypto');
+const { verifyRecaptcha } = require('../lib/recaptcha');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
+  const { recaptcha } = req.query;
   const clientId   = process.env.DISCORD_CLIENT_ID;
   const redirectUri = process.env.OAUTH_REDIRECT_URI;
 
   if (!clientId || !redirectUri) {
-    return res.redirect('/error.html?type=unknown');
+    return res.redirect('/error/?type=unknown');
+  }
+
+  // reCAPTCHA 検証
+  const isHuman = await verifyRecaptcha(recaptcha);
+  if (!isHuman) {
+    return res.redirect('/error/?type=bot');
   }
 
   // CSRF 対策: ランダムな state を生成してクッキーに保存
