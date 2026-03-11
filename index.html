@@ -12,78 +12,43 @@
   <script src="https://super-hiko14.com/main.js"></script>
   <script src="auth.js"></script>
   <script src="https://www.google.com/recaptcha/api.js?render=6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5"></script>
-  <script>
-    function startAuth() {
-      if (typeof grecaptcha === 'undefined') {
-        setTimeout(startAuth, 100);
-        return;
-      }
-      grecaptcha.ready(function() {
-        grecaptcha.execute('6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5', {action: 'auth'}).then(function(token) {
-          if (!token) {
-            console.error('Failed to get token');
-            window.location.href = '/api/auth'; // トークンに失敗しても一旦飛ばす（サーバー側でエラーにする）
-            return;
-          }
-          window.location.replace('/api/auth?recaptcha=' + encodeURIComponent(token));
-        }).catch(function(err) {
-          console.error('reCAPTCHA execution error:', err);
-          window.location.href = '/api/auth';
-        });
-      });
-    }
-    window.onload = startAuth;
-  </script>
 </head>
 
 <body>
-
   <main class="container">
-
     <div class="box auth-box">
       <div class="auth-card">
         <div class="auth-accent-bar"></div>
         <p class="auth-subtitle">Discord へリダイレクト中...</p>
       </div>
     </div>
-
-    <div class="box footer-box">
-      <div class="footer">
-        <div class="footer-top">
-          <nav class="footer-nav" aria-label="フッターナビゲーション">
-            <div class="footer-nav-group">
-              <span class="footer-nav-label">サイト</span>
-              <a href="https://super-hiko14.com">Profile</a>
-              <a href="https://about.super-hiko14.com">About</a>
-              <a href="https://tools.super-hiko14.com">Tools</a>
-            </div>
-            <div class="footer-nav-group">
-              <span class="footer-nav-label">法的情報</span>
-              <a href="https://legal.super-hiko14.com/terms">利用規約</a>
-              <a href="https://legal.super-hiko14.com/privacypolicy">プライバシーポリシー</a>
-            </div>
-          </nav>
-          <div class="footer-controls">
-            <button class="theme-toggle" aria-label="テーマ切り替え">
-              <img src="https://super-hiko14.com/sozai/images/moon.webp" alt="ダークモード" class="theme-icon-light" width="22" height="22">
-              <img src="https://super-hiko14.com/sozai/images/sun.webp"  alt="ライトモード" class="theme-icon-dark"  width="22" height="22">
-            </button>
-            <button class="scroll-to-top" aria-label="トップへ戻る">
-              <img src="https://super-hiko14.com/sozai/images/top_light.webp" alt="トップへ" class="scroll-icon-light" width="22" height="22">
-              <img src="https://super-hiko14.com/sozai/images/top_dark.webp"  alt="トップへ" class="scroll-icon-dark"  width="22" height="22">
-            </button>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>© 2026 Super Hiko14 All rights reserved.<br>All logos and trademarks are the property of their respective owners.</p>
-        </div>
-        <div class="footer-credit" aria-label="Created by Super Hiko14">
-          <div class="footer-credit-label">Created by</div>
-          <div class="footer-credit-main">Super Hiko14<span class="footer-credit-dot">.</span></div>
-        </div>
-      </div>
-    </div>
-
   </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function startAuth() {
+        if (typeof grecaptcha === 'undefined') {
+          setTimeout(startAuth, 100);
+          return;
+        }
+        grecaptcha.ready(function() {
+          grecaptcha.execute('6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5', {action: 'auth'})
+            .then(function(token) {
+              if (!token) {
+                console.error('Failed to get token');
+                window.location.href = '/api/auth';
+                return;
+              }
+              window.location.replace('/api/auth?recaptcha=' + encodeURIComponent(token));
+            })
+            .catch(function(err) {
+              console.error('reCAPTCHA execution error:', err);
+              window.location.href = '/api/auth';
+            });
+        });
+      }
+      startAuth();
+    });
+  </script>
 </body>
 </html>
