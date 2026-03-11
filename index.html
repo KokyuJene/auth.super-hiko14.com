@@ -13,11 +13,26 @@
   <script src="auth.js"></script>
   <script src="https://www.google.com/recaptcha/api.js?render=6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5"></script>
   <script>
-    grecaptcha.ready(function() {
-      grecaptcha.execute('6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5', {action: 'auth'}).then(function(token) {
-        window.location.replace('/api/auth?recaptcha=' + token);
+    function startAuth() {
+      if (typeof grecaptcha === 'undefined') {
+        setTimeout(startAuth, 100);
+        return;
+      }
+      grecaptcha.ready(function() {
+        grecaptcha.execute('6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5', {action: 'auth'}).then(function(token) {
+          if (!token) {
+            console.error('Failed to get token');
+            window.location.href = '/api/auth'; // トークンに失敗しても一旦飛ばす（サーバー側でエラーにする）
+            return;
+          }
+          window.location.replace('/api/auth?recaptcha=' + encodeURIComponent(token));
+        }).catch(function(err) {
+          console.error('reCAPTCHA execution error:', err);
+          window.location.href = '/api/auth';
+        });
       });
-    });
+    }
+    window.onload = startAuth;
   </script>
 </head>
 
