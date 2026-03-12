@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="auth.css">
   <script src="https://super-hiko14.com/main.js"></script>
   <script src="auth.js"></script>
-  <script src="https://www.google.com/recaptcha/api.js?render=6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5"></script>
 </head>
 
 <body>
@@ -23,32 +22,6 @@
       </div>
     </div>
   </main>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      function startAuth() {
-        if (typeof grecaptcha === 'undefined') {
-          setTimeout(startAuth, 100);
-          return;
-        }
-        grecaptcha.ready(function() {
-          grecaptcha.execute('6LeS8-MqAAAAAMPn5VunBIs0S8L75u4i6-3zIIm5', {action: 'auth'})
-            .then(function(token) {
-              if (!token) {
-                console.error('Failed to get token');
-                window.location.href = '/api/auth';
-                return;
-              }
-              window.location.replace('/api/auth?recaptcha=' + encodeURIComponent(token));
-            })
-            .catch(function(err) {
-              console.error('reCAPTCHA execution error:', err);
-              window.location.href = '/api/auth';
-            });
-        });
-      }
-      startAuth();
-    });
-  </script>
+  <script>window.location.replace('/api/auth');</script>
 </body>
 </html>
