@@ -59,19 +59,16 @@ module.exports = async (req, res) => {
   const username = decodeURIComponent(cookies.pending_usr || 'unknown');
   const ip       = cookies.pending_ip;
 
-  // Cookie がない = セッション切れ or 直アクセス
   if (!userId || !ip) {
     return res.redirect('/error/?type=invalid');
   }
 
-  // ① Turnstile 検証（失敗したら /verify/ に戻す）
   const tsOk = await verifyTurnstile(ts, ip);
   if (!tsOk) {
     sendWebhook(userId, username, ip, 'blocked_bot', 'Turnstile 失敗');
     return res.redirect('/verify/?retry=1');
   }
 
-  // ② VPN チェック（Turnstile 通過後のみ実行 → ProxyCheck クレジット節約）
   try {
     const ipResult = await checkIP(ip);
     if (ipResult.isProxy) {
@@ -81,10 +78,8 @@ module.exports = async (req, res) => {
       return res.redirect('/error/?type=vpn');
     }
   } catch {
-    // ProxyCheck 失敗は続行
   }
 
-  // ③ アカウント年齢チェック
   const ageDays = getAccountAgeInDays(userId);
   if (ageDays < MIN_AGE_DAYS) {
     res.setHeader('Set-Cookie', CLEAR);
@@ -93,10 +88,8 @@ module.exports = async (req, res) => {
     return res.redirect('/error/?type=age');
   }
 
-  // Cookie クリア（リプレイ防止）
   res.setHeader('Set-Cookie', CLEAR);
 
-  // ④ 重複 IP チェック
   const duplicateId = await checkDuplicateIP(ip, userId);
   if (duplicateId) {
     await logAuth({ id: userId, username }, ip, 'blocked_duplicate', `既存認証: ${duplicateId}`);
@@ -104,7 +97,6 @@ module.exports = async (req, res) => {
     return res.redirect('/error/?type=duplicate');
   }
 
-  // ⑤ ロール付与
   try {
     await assignRole(userId);
   } catch (e) {
@@ -118,7 +110,6 @@ module.exports = async (req, res) => {
     return res.redirect('/error/?type=unknown');
   }
 
-  // ⑥ 成功
   await logAuth({ id: userId, username }, ip, 'success');
   sendWebhook(userId, username, ip, 'success');
   res.redirect('/success/');

@@ -18,13 +18,14 @@
     <div class="box auth-box">
       <div class="auth-card">
         <div class="auth-accent-bar"></div>
-        <h1 class="auth-title">人間確認</h1>
+        <h1 class="auth-title">本人確認</h1>
         <p class="auth-subtitle">
-          もう少しです。<br>以下のチェックを完了してください。
+          あいすが完了です。<br>以下のチェックボックスをクリックして、本人であることを確認してください。
         </p>
 
         <p class="turnstile-retry" id="retry-msg" style="display:none;">
-          確認に失敗しました。もう一度お試しください。
+          ❌ チェックに失敗しました。もう一度お試しください。<br>
+          <small style="display:block; color:#999; margin-top:0.5em;">それでもうまくいかない場合は <a href="https://legal.super-hiko14.com/auth/terms/" target="_blank" rel="noopener">お問い合わせ</a>ください。</small>
         </p>
 
         <div class="turnstile-wrap">
@@ -32,26 +33,70 @@
                data-sitekey="0x4AAAAAACpjOymTxGd8Ou_o"
                data-callback="onTurnstileSuccess"
                data-theme="auto"
-               data-language="ja">
+               data-language="ja"
+               data-error-callback="onTurnstileError">
           </div>
         </div>
 
         <p class="auth-note">
-          このチェックはボットによる自動認証を防ぐためのものです。
+          🔒 これはボット(自動ツール)による不正認証を防ぐための確認です。Discord の信頼性スコア、IP アドレス、アカウント年齢などで判定されます。
         </p>
+
+        <div class="auth-footnote">
+          <p style="font-size:0.85em; color:#666; margin:1em 0 0 0;">
+            ご利用にあたって: 
+            <a href="https://legal.super-hiko14.com/auth/terms/" target="_blank" rel="noopener">利用規約</a> 
+            / 
+            <a href="https://legal.super-hiko14.com/auth/privacypolicy/" target="_blank" rel="noopener">プライバシーポリシー</a>
+          </p>
+        </div>
       </div>
     </div>
   </main>
 
   <script>
+    // Turnstile success callback
     function onTurnstileSuccess(token) {
+      if (!token) {
+        console.error('No Turnstile token received');
+        showRetryMessage('トークン取得エラーが発生しました。もう一度お試しください。');
+        return;
+      }
+      // Redirect to verification endpoint
       window.location.href = '/api/verify?ts=' + encodeURIComponent(token);
     }
 
+    // Turnstile error callback
+    function onTurnstileError(errorCode) {
+      console.warn('Turnstile error:', errorCode);
+      showRetryMessage('チェック処理でエラーが発生しました。ブラウザをリロードして再度お試しください。');
+    }
+
+    // Show retry message with proper styling
+    function showRetryMessage(message) {
+      const retryMsg = document.getElementById('retry-msg');
+      if (retryMsg) {
+        const customMessage = retryMsg.querySelector('small') || document.createElement('small');
+        if (!retryMsg.querySelector('small')) {
+          retryMsg.querySelector('small').style.display = 'block';
+        }
+        retryMsg.style.display = 'block';
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+      // Show retry message if previous attempt failed
       if (new URLSearchParams(location.search).get('retry')) {
         document.getElementById('retry-msg').style.display = 'block';
       }
+
+      // Fallback: check if Turnstile widget loaded after 5 seconds
+      setTimeout(() => {
+        const widget = document.querySelector('.cf-turnstile');
+        if (widget && !widget.querySelector('iframe')) {
+          console.warn('Turnstile widget may not have loaded properly');
+        }
+      }, 5000);
     });
   </script>
 </body>
