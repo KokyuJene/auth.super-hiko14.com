@@ -171,50 +171,37 @@ html[data-theme="dark"] .error-reason {
   font-size: 0.78rem;
   color: #e05252;
   margin-bottom: 16px;
-  padding: 10px 12px;
-  background: rgba(224, 82, 82, 0.08);
-  border-radius: 8px;
-  border-left: 3px solid #e05252;
-  text-align: left;
-}
-
-.turnstile-retry small a {
-  color: #6ddbb0;
-  text-decoration: none;
-  font-weight: 500;
-  border-bottom: 1px solid rgba(109, 219, 176, 0.3);
-  transition: color 0.18s ease;
-}
-
-.turnstile-retry small a:hover {
-  color: #5bc988;
-}
-
-html[data-theme="dark"] .turnstile-retry {
-  background: rgba(224, 82, 82, 0.12);
-  border-left-color: #e05252;
 }
 
 /* =========================================
-   Auth footnote (利用規約・プライバシーポリシー)
+   Verify page
    ========================================= */
-.auth-footnote {
-  margin-top: 12px;
-  text-align: center;
+.verify-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background: rgba(39, 87, 102, 0.1);
+  color: #3a8a7a;
 }
 
-.auth-footnote a {
+.verify-icon svg { flex-shrink: 0; width: 36px; height: 36px; }
+
+html[data-theme="dark"] .verify-icon {
+  background: rgba(186, 255, 192, 0.07);
   color: #6ddbb0;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.18s ease;
-  border-bottom: 1px solid rgba(109, 219, 176, 0.2);
 }
 
-.auth-footnote a:hover {
-  color: #5bc988;
-  border-bottom-color: rgba(109, 219, 176, 0.4);
+.auth-step {
+  font-size: 0.68rem;
+  color: #bbb;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
-html[data-theme="dark"] .auth-footnote a { color: #4bc48a; }
-html[data-theme="dark"] .auth-footnote a:hover { color: #5bc988; }
+html[data-theme="dark"] .auth-step { color: #555; }

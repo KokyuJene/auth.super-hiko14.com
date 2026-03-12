@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>認証確認 - 高級ジェネ</title>
+  <title>本人確認 - 高級ジェネ</title>
+  <meta name="description" content="高級ジェネ Discordサーバーの認証 — 本人確認ステップです。">
   <link rel="icon" href="https://super-hiko14.com/favicon.ico">
   <link rel="icon" type="image/png" href="https://super-hiko14.com/favicon.png">
   <link rel="stylesheet" href="https://super-hiko14.com/main.css">
@@ -14,18 +15,31 @@
 </head>
 
 <body>
+
   <main class="container">
+
     <div class="box auth-box">
       <div class="auth-card">
+
+        <div class="verify-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+
+        <p class="auth-step">STEP 2 / 2</p>
+
         <div class="auth-accent-bar"></div>
+
         <h1 class="auth-title">本人確認</h1>
         <p class="auth-subtitle">
-          あいすが完了です。<br>以下のチェックボックスをクリックして、本人であることを確認してください。
+          Discord認証が完了しました。<br>
+          ボットによる自動アクセスを防ぐため、<br>
+          以下のチェックを完了してください。
         </p>
 
         <p class="turnstile-retry" id="retry-msg" style="display:none;">
-          ❌ チェックに失敗しました。もう一度お試しください。<br>
-          <small style="display:block; color:#999; margin-top:0.5em;">それでもうまくいかない場合は <a href="https://legal.super-hiko14.com/auth/terms/" target="_blank" rel="noopener">お問い合わせ</a>ください。</small>
+          確認に失敗しました。もう一度お試しください。
         </p>
 
         <div class="turnstile-wrap">
@@ -33,71 +47,68 @@
                data-sitekey="0x4AAAAAACpjOymTxGd8Ou_o"
                data-callback="onTurnstileSuccess"
                data-theme="auto"
-               data-language="ja"
-               data-error-callback="onTurnstileError">
+               data-language="ja">
           </div>
         </div>
 
         <p class="auth-note">
-          🔒 これはボット(自動ツール)による不正認証を防ぐための確認です。Discord の信頼性スコア、IP アドレス、アカウント年齢などで判定されます。
+          確認を完了することで、<a href="https://legal.super-hiko14.com/auth/terms" target="_blank" rel="noopener">利用規約</a>および<a href="https://legal.super-hiko14.com/auth/privacypolicy" target="_blank" rel="noopener">プライバシーポリシー</a>に同意したものとみなされます。
         </p>
 
-        <div class="auth-footnote">
-          <p style="font-size:0.85em; color:#666; margin:1em 0 0 0;">
-            ご利用にあたって: 
-            <a href="https://legal.super-hiko14.com/auth/terms/" target="_blank" rel="noopener">利用規約</a> 
-            / 
-            <a href="https://legal.super-hiko14.com/auth/privacypolicy/" target="_blank" rel="noopener">プライバシーポリシー</a>
-          </p>
+      </div>
+    </div>
+
+    <div class="box footer-box">
+      <div class="footer">
+        <div class="footer-top">
+          <nav class="footer-nav" aria-label="フッターナビゲーション">
+            <div class="footer-nav-group">
+              <span class="footer-nav-label">サイト</span>
+              <a href="https://super-hiko14.com">Profile</a>
+              <a href="https://about.super-hiko14.com">About</a>
+              <a href="https://tools.super-hiko14.com">Tools</a>
+            </div>
+            <div class="footer-nav-group">
+              <span class="footer-nav-label">法的情報</span>
+              <a href="https://legal.super-hiko14.com/auth/terms">利用規約（認証）</a>
+              <a href="https://legal.super-hiko14.com/auth/privacypolicy">プライバシーポリシー（認証）</a>
+              <a href="https://legal.super-hiko14.com">その他の規約</a>
+            </div>
+          </nav>
+          <div class="footer-controls">
+            <button class="theme-toggle" aria-label="テーマ切り替え">
+              <img src="https://super-hiko14.com/sozai/images/moon.webp" alt="ダークモード" class="theme-icon-light" width="22" height="22">
+              <img src="https://super-hiko14.com/sozai/images/sun.webp"  alt="ライトモード" class="theme-icon-dark"  width="22" height="22">
+            </button>
+            <button class="scroll-to-top" aria-label="トップへ戻る">
+              <img src="https://super-hiko14.com/sozai/images/top_light.webp" alt="トップへ" class="scroll-icon-light" width="22" height="22">
+              <img src="https://super-hiko14.com/sozai/images/top_dark.webp"  alt="トップへ" class="scroll-icon-dark"  width="22" height="22">
+            </button>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 Super Hiko14 All rights reserved.<br>All logos and trademarks are the property of their respective owners.</p>
+        </div>
+        <div class="footer-credit" aria-label="Created by Super Hiko14">
+          <div class="footer-credit-label">Created by</div>
+          <div class="footer-credit-main">Super Hiko14<span class="footer-credit-dot">.</span></div>
         </div>
       </div>
     </div>
+
   </main>
 
   <script>
-    // Turnstile success callback
     function onTurnstileSuccess(token) {
-      if (!token) {
-        console.error('No Turnstile token received');
-        showRetryMessage('トークン取得エラーが発生しました。もう一度お試しください。');
-        return;
-      }
-      // Redirect to verification endpoint
       window.location.href = '/api/verify?ts=' + encodeURIComponent(token);
     }
 
-    // Turnstile error callback
-    function onTurnstileError(errorCode) {
-      console.warn('Turnstile error:', errorCode);
-      showRetryMessage('チェック処理でエラーが発生しました。ブラウザをリロードして再度お試しください。');
-    }
-
-    // Show retry message with proper styling
-    function showRetryMessage(message) {
-      const retryMsg = document.getElementById('retry-msg');
-      if (retryMsg) {
-        const customMessage = retryMsg.querySelector('small') || document.createElement('small');
-        if (!retryMsg.querySelector('small')) {
-          retryMsg.querySelector('small').style.display = 'block';
-        }
-        retryMsg.style.display = 'block';
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      // Show retry message if previous attempt failed
+    document.addEventListener('DOMContentLoaded', function () {
       if (new URLSearchParams(location.search).get('retry')) {
         document.getElementById('retry-msg').style.display = 'block';
       }
-
-      // Fallback: check if Turnstile widget loaded after 5 seconds
-      setTimeout(() => {
-        const widget = document.querySelector('.cf-turnstile');
-        if (widget && !widget.querySelector('iframe')) {
-          console.warn('Turnstile widget may not have loaded properly');
-        }
-      }, 5000);
     });
   </script>
+
 </body>
 </html>

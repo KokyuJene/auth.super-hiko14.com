@@ -52,8 +52,9 @@
             </div>
             <div class="footer-nav-group">
               <span class="footer-nav-label">法的情報</span>
-              <a href="https://legal.super-hiko14.com/terms">利用規約</a>
-              <a href="https://legal.super-hiko14.com/privacypolicy">プライバシーポリシー</a>
+              <a href="https://legal.super-hiko14.com/auth/terms">利用規約（認証）</a>
+              <a href="https://legal.super-hiko14.com/auth/privacypolicy">プライバシーポリシー（認証）</a>
+              <a href="https://legal.super-hiko14.com">その他の規約</a>
             </div>
           </nav>
           <div class="footer-controls">
@@ -83,7 +84,7 @@
     (function() {
       var ERRORS = {
         vpn:       { title: 'VPN / プロキシ検出',        detail: 'VPN、プロキシ、またはデータセンター回線が検出されました。VPNをオフにしてから再度お試しください。' },
-        bot:       { title: '不正なアクセス',          detail: 'reCAPTCHA によるボット判定、または不正なアクセスが検出されました。正規のブラウザからお試しください。' },
+        bot:       { title: '自動アクセスを検出',        detail: 'Cloudflare Turnstile によるボット判定が失敗しました。正規のブラウザから再度お試しください。' },
         age:       { title: 'アカウントが新しすぎます',   detail: 'Discordアカウント作成から14日未満のため認証できません。しばらく経ってから再度お試しください。' },
         duplicate: { title: '重複が検出されました',       detail: 'このIPアドレスでは既に別のアカウントが認証済みです。サブアカウントの疑いがあるためブロックされました。' },
         invalid:   { title: 'セッションエラー',          detail: '認証セッションが無効または期限切れです。最初からやり直してください。' },
