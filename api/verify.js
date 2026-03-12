@@ -28,7 +28,11 @@ async function sendWebhook(userId, username, ip, status, detail) {
 
   const { logWebhookMessage } = require('../lib/supabase');
 
-  const statusEmoji = status === 'success' ? '✅' : '⛔';
+  // カスタム絵文字（Discord）
+  const EMOJI_SUCCESS = '<:check_1:1426764161261633566>';
+  const EMOJI_FAIL    = '<:cross_1:1426764173458673674>';
+  const statusEmoji = status === 'success' ? EMOJI_SUCCESS : EMOJI_FAIL;
+
   const hiddenIp = `||${ip}||`;  // Discord スポイラー記法で自動隠蔽
   
   const content = `${statusEmoji} **${status === 'success' ? '認証成功' : 'ブロック'}**\n` +

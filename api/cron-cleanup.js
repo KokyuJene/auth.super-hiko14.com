@@ -59,7 +59,6 @@ async function removeIPFromMessage(messageId) {
 }
 
 module.exports = async (req, res) => {
-  // Cron 認証（Vercel の X-Vercel-Cron ヘッダーを確認）
   if (req.headers['x-vercel-cron-secret'] !== process.env.CRON_SECRET) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
