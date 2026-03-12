@@ -22,34 +22,35 @@ function parseCookies(req) {
   return list;
 }
 
-function sendWebhook(userId, username, ip, status, detail) {
+async function sendWebhook(userId, username, ip, status, detail) {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
   if (!webhookUrl) return;
-  const COLOR_MAP = {
-    success:           0x6ddbb0,
-    blocked_bot:       0xe05252,
-    blocked_vpn:       0xe05252,
-    blocked_age:       0xf0b429,
-    blocked_duplicate: 0xe05252,
-    blocked_guild:     0xaaaaaa,
-    blocked_unknown:   0x888888,
-  };
-  fetch(webhookUrl, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      embeds: [{
-        title: status === 'success' ? '<:check_1:1426764161261633566> 認証成功' : `<:cross_1:1426764173458673674> 認証ブロック: ${status}`,
-        color: COLOR_MAP[status] || 0x888888,
-        fields: [
-          { name: 'ユーザー', value: `${username} (${userId})`, inline: true },
-          { name: 'IP',       value: ip || '||unknown||',           inline: true },
-          ...(detail ? [{ name: '理由', value: detail, inline: false }] : []),
-        ],
-        timestamp: new Date().toISOString(),
-      }],
-    }),
-  }).catch(() => {});
+
+  const { logWebhookMessage } = require('../lib/supabase');
+
+  const statusEmoji = status === 'success' ? '✅' : '⛔';
+  const hiddenIp = `||${ip}||`;  // Discord スポイラー記法で自動隠蔽
+  
+  const content = `${statusEmoji} **${status === 'success' ? '認証成功' : 'ブロック'}**\n` +
+    `ユーザー: ${username} (${userId})\n` +
+    `IP: ${hiddenIp}\n` +
+    `${detail ? `理由: ${detail}\n` : ''}` +
+    `タイムスタンプ: <t:${Math.floor(Date.now() / 1000)}:F>`;
+
+  try {
+    const response = await fetch(webhookUrl, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content }),
+    });
+    
+    const data = await response.json();
+    if (data.id) {
+      await logWebhookMessage(data.id, ip, status);
+    }
+  } catch (e) {
+    // webhook 失敗は続行
+  }
 }
 
 module.exports = async (req, res) => {
