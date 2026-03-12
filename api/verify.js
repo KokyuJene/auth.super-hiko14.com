@@ -39,11 +39,11 @@ function sendWebhook(userId, username, ip, status, detail) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       embeds: [{
-        title: status === 'success' ? '✅ 認証成功' : `❌ 認証ブロック: ${status}`,
+        title: status === 'success' ? '<:check_1:1426764161261633566> 認証成功' : `<:cross_1:1426764173458673674> 認証ブロック: ${status}`,
         color: COLOR_MAP[status] || 0x888888,
         fields: [
           { name: 'ユーザー', value: `${username} (${userId})`, inline: true },
-          { name: 'IP',       value: ip || 'unknown',           inline: true },
+          { name: 'IP',       value: ip || '||unknown||',           inline: true },
           ...(detail ? [{ name: '理由', value: detail, inline: false }] : []),
         ],
         timestamp: new Date().toISOString(),
