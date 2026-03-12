@@ -1,4 +1,4 @@
-﻿/* =========================================
+/* =========================================
    Auth — Layout
    ========================================= */
 .container {
@@ -16,6 +16,12 @@
   justify-content: center;
   padding: 40px 24px;
   width: 100%;
+}
+
+@media (max-width: 480px) {
+  .auth-box {
+    padding: 30px 16px;
+  }
 }
 
 .footer-box {
@@ -75,22 +81,32 @@ html[data-theme="dark"] .auth-subtitle { color: #666; }
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 13px 28px;
+  padding: 14px 28px;
   border-radius: 12px;
-  background: #5865F2;
+  background: #393d69;
   color: #fff;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: bold;
-  letter-spacing: 0.04em;
-  transition: background 0.22s ease, opacity 0.22s ease;
+  letter-spacing: 0.05em;
+  transition: transform 0.2s ease, background 0.2s ease;
   width: 100%;
-  margin-bottom: 20px;
+  margin: 0 0 24px;
   cursor: pointer;
   text-decoration: none;
+  box-sizing: border-box;
 }
 
 .auth-btn:hover {
-  background: #4752c4;
+  background: #393d70;
+  transform: translateY(-2px);
+}
+
+.auth-btn:active {
+  transform: translateY(1px);
+}
+
+.auth-btn + .auth-btn {
+  margin-top: -12px;
 }
 
 /* =========================================
