@@ -43,7 +43,7 @@
 .auth-logo {
   width: 80px;
   height: 80px;
-  border-radius: 20px;
+  border-radius: 24px;
   object-fit: cover;
   margin-bottom: 20px;
 }
@@ -82,7 +82,7 @@ html[data-theme="dark"] .auth-subtitle { color: #666; }
   justify-content: center;
   gap: 10px;
   padding: 14px 28px;
-  border-radius: 12px;
+  border-radius: 24px;
   background: #393d69;
   color: #fff;
   font-size: 0.95rem;
@@ -158,7 +158,7 @@ html[data-theme="dark"] .auth-note a { color: #555; border-bottom-color: rgba(25
 .error-reason {
   background: rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.07);
-  border-radius: 12px;
+  border-radius: 24px;
   padding: 14px 18px;
   font-size: 0.82rem;
   color: #777;
